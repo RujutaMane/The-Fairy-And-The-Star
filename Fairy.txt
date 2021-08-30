@@ -1,0 +1,84 @@
+//variables
+var fairy,fairyImg;
+var star,starImg;
+var backgroungImg,sky;
+var score=0;
+var stargroup;
+var gamestate="START";
+
+function preload(){
+  backgroundImg=loadImage("sky.jpg");
+  fairyImg=loadImage("fairy.png");
+    starImg=loadImage("star.png");
+}
+
+function setup(){
+  //creating canvas
+  createCanvas(650,350);
+  
+  fairy = createSprite(150,200,10,70);
+  fairy.addImage(fairyImg);
+  fairy.scale=0.3;
+  fairy.debug=false;
+  fairy.setCollider("circle",40,-10,50);
+  
+  sky = createSprite(300,300,600,600);
+  sky.addImage(backgroundImg);
+  sky.velocityX=-(2+score/2);
+  
+  
+  fairy.depth=sky.depth;
+  fairy.depth=fairy.depth+1;
+ 
+  stargroup=new Group();
+  }
+
+function draw(){
+  
+  background("gold");
+  if(gamestate==="START"){
+    fill("silver");
+    textSize(60);
+    text("Press S to start",140,200);
+    if(keyDown("S")){
+      gamestate="PLAY";
+    }
+  }
+  else if(gamestate==="PLAY"){
+    
+  points();
+
+   
+  if (sky.x<500){
+    sky.x=sky.width/2
+  }
+  
+  if (keyDown("up_arrow")){
+    
+    fairy.y=fairy.y-4;
+  }
+  
+   if (keyDown("down_arrow")){
+    fairy.y=fairy.y+4;
+  }
+
+    if(stargroup.isTouching(fairy)){
+    stargroup.destroyEach();
+    score=score+5;
+  }
+}
+      
+  drawSprites();
+  }        
+  
+  if(frameCount%400===0){
+    star = createSprite(650,100,10,70);
+    star.addImage(starImg);
+    star.scale=0.2;
+    star.velocityX=-(2+score/10);
+    star.y=Math.round(random(50,300))
+    stargroup.add(star);
+  }
+}
+
+
